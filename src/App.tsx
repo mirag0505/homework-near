@@ -83,13 +83,16 @@ function App() {
     const submit = async () => {
         // use a contract view method
         if (isLoggedIn && colorRGB) {
-            await contract?.set(colorRGB)
+            await contract?.set(colorRGB).then(async v => {
+                const colors = await contract.get()
+                setColorRGB({r: +colors[0], g: +colors[1], b: +colors[2]})
+            })
         }
     }
 
     return (
         <div className="App">
-            <h1>
+            <h1 style={{ 'color': `rgba(${colorRGB?.r || 0}, ${colorRGB?.b || 0}, ${colorRGB?.g || 0}, 1)`}}>
                 {isLoggedIn ? "You are logged in" : "You are not logged in"}
             </h1>
             <div>
